@@ -4,16 +4,14 @@ import backend.academy.log_analyzer.enums.OutputFormats;
 import backend.academy.log_analyzer.log.Log;
 import backend.academy.log_analyzer.matcher.LogMatcherFilter;
 import backend.academy.log_analyzer.parameter.ArgsParameters;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
-
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Тесты класса LogMatcherFilter")

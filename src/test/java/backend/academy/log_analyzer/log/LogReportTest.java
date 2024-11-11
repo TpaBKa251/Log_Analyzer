@@ -1,14 +1,11 @@
 package backend.academy.log_analyzer.log;
 
 import backend.academy.log_analyzer.enums.HttpCodes;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Тесты класса LogReport")
