@@ -69,8 +69,8 @@ public class LogAnalyzer {
 
             if (report.getTotalCountRequests() == 0) {
                 throw new ParameterException("Во входных файлах/URL не найдено ни одного лога."
-                    + "\nПросмотренные ресурсы: " +
-                    readers.values().stream().map(u -> "\n\t" + u.toString()).toList() + "\nФильтры: "
+                    + "\nПросмотренные ресурсы: "
+                    + readers.values().stream().map(u -> "\n\t" + u.toString()).toList() + "\nФильтры: "
                         + "\n\tначальная дата: " + params.from() + "\n\tконечная дата: " + params.to()
                         + "\n\tполе для фильтрации: " + params.filterField()
                         + "\n\tзначение: " + params.filterValue());
