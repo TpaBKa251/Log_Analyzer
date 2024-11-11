@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.experimental.UtilityClass;
 
-// Не вижу смысла тестировать
 /**
  * Класс-хранилище с полями лога (параметрами NGINX лога)
  */
@@ -20,13 +19,12 @@ public class LogFieldsStorage {
     public static final List<String> LOG_FIELDS = Arrays.stream(Log.class.getDeclaredFields())
         .limit(COUNT_OF_FIELDS)
         .map(Field::getName)
-        .collect(Collectors.toList());
+        .toList();
 
     public static final List<String> ALL_FIELDS = Stream.concat(
             LOG_FIELDS.stream(),
-            Arrays.stream(Log.Request.class.getDeclaredFields()
-            ).map(Field::getName)
+            Arrays.stream(Log.Request.class.getDeclaredFields()).map(Field::getName)
         )
-        .collect(Collectors.toList());
+        .toList();
 }
 
