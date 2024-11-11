@@ -5,6 +5,7 @@ import backend.academy.log_analyzer.maper.ReportMapper;
 import backend.academy.log_analyzer.matcher.LogMatcherDate;
 import backend.academy.log_analyzer.matcher.LogMatcherFilter;
 import backend.academy.log_analyzer.parameter.ArgsParameters;
+import com.beust.jcommander.ParameterException;
 import com.google.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -67,14 +68,12 @@ public class LogAnalyzer {
                 .forEach(filteredLog -> report.addAllStats(filteredLog, uris[0]));
 
             if (report.getTotalCountRequests() == 0) {
-                log.error("Во входных файлах/URL не найдено ни одного лога."
-                        + "\nПросмотренные ресурсы:{}",
+                throw new ParameterException("Во входных файлах/URL не найдено ни одного лога."
+                    + "\nПросмотренные ресурсы: " +
                     readers.values().stream().map(u -> "\n\t" + u.toString()).toList() + "\nФильтры: "
                         + "\n\tначальная дата: " + params.from() + "\n\tконечная дата: " + params.to()
                         + "\n\tполе для фильтрации: " + params.filterField()
                         + "\n\tзначение: " + params.filterValue());
-
-                return "";
             }
 
             return reportMapper.mapLogToOutputFormat(report, params);

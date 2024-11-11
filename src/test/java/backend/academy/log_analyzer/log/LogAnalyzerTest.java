@@ -4,6 +4,7 @@ import backend.academy.log_analyzer.maper.ReportMapper;
 import backend.academy.log_analyzer.matcher.LogMatcherDate;
 import backend.academy.log_analyzer.matcher.LogMatcherFilter;
 import backend.academy.log_analyzer.parameter.ArgsParameters;
+import com.beust.jcommander.ParameterException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -22,6 +23,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +39,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -74,9 +77,6 @@ public class LogAnalyzerTest {
 
     WireMockServer wireMockServer;
 
-    static ByteArrayOutputStream outputStream;
-    static PrintStream originalSystemOut = System.out;
-
     @BeforeAll
     static void setTempDir() throws IOException {
         Path nestedDir1 = tempDir.resolve("logsDir/logs/some-logs/2024");
@@ -96,10 +96,6 @@ public class LogAnalyzerTest {
 
         Files.copy(sourceFile2, dir2.resolve("05-2023.txt"), StandardCopyOption.REPLACE_EXISTING);
         Files.copy(sourceFile5, dir3.resolve("05"), StandardCopyOption.REPLACE_EXISTING);
-
-        outputStream = new ByteArrayOutputStream();
-        originalSystemOut = System.out;
-        System.setOut(new PrintStream(outputStream));
     }
 
     @AfterEach
@@ -110,8 +106,6 @@ public class LogAnalyzerTest {
             } catch (IOException ignored) {
             }
         });
-
-        System.setOut(originalSystemOut);
     }
 
     @DisplayName("Тест чтения логов из файлов")
@@ -188,13 +182,11 @@ public class LogAnalyzerTest {
                 "value"
             ));
 
-            String result = logAnalyzer.analyzeLogs(parameters);
-            String logError = outputStream.toString().trim();
+            assertThatThrownBy(() -> logAnalyzer.analyzeLogs(parameters))
+                .isInstanceOf(ParameterException.class)
+                .hasMessageStartingWith("Во входных файлах/URL не найдено ни одного лога.");
 
             verify(logReport, times(0)).addAllStats(any(), anyString());
-
-            assertThat(result).isEmpty();
-            assertThat(logError).contains("Во входных файлах/URL не найдено ни одного лога.");
         }
     }
 
@@ -220,6 +212,8 @@ public class LogAnalyzerTest {
 
         lenient().when(logMatcherDate.isLogMatch(any(LocalDateTime.class), eq(parameters))).thenReturn(true);
         lenient().when(logMatcherFilter.isLogMatchByFilter(any(Log.class), eq(parameters))).thenReturn(true);
+        lenient().when(logReport.getTotalCountRequests()).thenReturn(1L);
+        lenient().when(reportMapper.mapLogToOutputFormat(logReport, parameters)).thenReturn("Test Report");
 
         try (MockedStatic<Log> mockedLog = mockStatic(Log.class)) {
             mockedLog.when(() -> Log.parse(anyString())).thenReturn(new Log(
@@ -278,15 +272,12 @@ public class LogAnalyzerTest {
                 "value"
             ));
 
-            String result = logAnalyzer.analyzeLogs(parameters);
-            String logError = outputStream.toString().trim();
-
-            verify(logReport, times(0)).addAllStats(any(), eq(logUri.toString()));
+            assertThatThrownBy(() -> logAnalyzer.analyzeLogs(parameters))
+                .isInstanceOf(ParameterException.class)
+                .hasMessageStartingWith("Во входных файлах/URL не найдено ни одного лога.");
 
             wireMockServer.verify(getRequestedFor(urlEqualTo("/test-logs")));
-
-            assertThat(result).isEmpty();
-            assertThat(logError).contains("Во входных файлах/URL не найдено ни одного лога.");
+            verify(logReport, times(0)).addAllStats(any(), anyString());
         }
 
         wireMockServer.stop();
