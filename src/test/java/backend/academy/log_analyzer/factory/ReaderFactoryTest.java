@@ -43,27 +43,27 @@ public class ReaderFactoryTest {
 
         Files.createFile(dir2.resolve( "05-2023.txt"));
         Files.createFile(dir2.resolve("logs-from-url.txt"));
-        Files.createFile(dir2.resolve("logs_2024.log"));
+        Files.createFile(dir2.resolve("logs_2024.txt"));
 
         Files.createFile(dir3.resolve("05"));
-        Files.createFile(dir3.resolve("05.log"));
+        Files.createFile(dir3.resolve("05.txt"));
 
         Files.createFile(dir4.resolve("logs"));
 
         Path sourceFile1 = Paths.get("src/main/resources/logs/logs.txt");
         Path sourceFile2 = Paths.get("src/main/resources/logs/some-logs/05-2023.txt");
         Path sourceFile3 = Paths.get("src/main/resources/logs/some-logs/logs-from-url.txt");
-        Path sourceFile4 = Paths.get("src/main/resources/logs/some-logs/logs_2024.log");
+        Path sourceFile4 = Paths.get("src/main/resources/logs/some-logs/logs_2024.txt");
         Path sourceFile5 = Paths.get("src/main/resources/logs/some-logs/2024/05");
-        Path sourceFile6 = Paths.get("src/main/resources/logs/some-logs/2024/05.log");
+        Path sourceFile6 = Paths.get("src/main/resources/logs/some-logs/2024/05.txt");
         Path sourceFile7 = Paths.get("src/main/resources/logs/some-logs/2024_08/logs");
 
         Files.copy(sourceFile1, dir1.resolve("logs.txt"), StandardCopyOption.REPLACE_EXISTING);
         Files.copy(sourceFile2, dir2.resolve("05-2023.txt"), StandardCopyOption.REPLACE_EXISTING);
         Files.copy(sourceFile3, dir2.resolve("logs-from-url.txt"), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(sourceFile4, dir2.resolve("logs_2024.log"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(sourceFile4, dir2.resolve("logs_2024.txt"), StandardCopyOption.REPLACE_EXISTING);
         Files.copy(sourceFile5, dir3.resolve("05"), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(sourceFile6, dir3.resolve("05.log"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(sourceFile6, dir3.resolve("05.txt"), StandardCopyOption.REPLACE_EXISTING);
         Files.copy(sourceFile7, dir4.resolve("logs"), StandardCopyOption.REPLACE_EXISTING);
     }
 
@@ -85,9 +85,9 @@ public class ReaderFactoryTest {
                 tempDir.resolve("logsDir/logs/logs.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/05-2023.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/logs-from-url.txt").toUri(),
-                tempDir.resolve("logsDir/logs/some-logs/logs_2024.log").toUri(),
+                tempDir.resolve("logsDir/logs/some-logs/logs_2024.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/2024/05").toUri(),
-                tempDir.resolve("logsDir/logs/some-logs/2024/05.log").toUri(),
+                tempDir.resolve("logsDir/logs/some-logs/2024/05.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/2024_08/logs").toUri()
         );
 
@@ -105,17 +105,17 @@ public class ReaderFactoryTest {
                 tempDir.resolve("logsDir/logs/logs.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/05-2023.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/logs-from-urld.txt").toUri(),
-                tempDir.resolve("logsDir/logs/some-logs/logs_2024.log").toUri(),
+                tempDir.resolve("logsDir/logs/some-logs/logs_2024.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/2024/05d").toUri(),
-                tempDir.resolve("logsDir/logs/some-logs/2024/05.log").toUri(),
+                tempDir.resolve("logsDir/logs/some-logs/2024/05.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/2024_08/logs").toUri()
         );
 
         List<URI> expectedUris = List.of(
                 tempDir.resolve("logsDir/logs/logs.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/05-2023.txt").toUri(),
-                tempDir.resolve("logsDir/logs/some-logs/logs_2024.log").toUri(),
-                tempDir.resolve("logsDir/logs/some-logs/2024/05.log").toUri(),
+                tempDir.resolve("logsDir/logs/some-logs/logs_2024.txt").toUri(),
+                tempDir.resolve("logsDir/logs/some-logs/2024/05.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/2024_08/logs").toUri()
         );
 

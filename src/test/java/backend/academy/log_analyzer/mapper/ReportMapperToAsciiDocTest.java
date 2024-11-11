@@ -47,13 +47,13 @@ class ReportMapperToAsciiDocTest {
             `/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3-java-\
             TpaBKa251/src/main/resources/logs/some-logs/2024/05`, \
             `/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3-java-\
-            TpaBKa251/src/main/resources/logs/some-logs/2024/05.log`, \
+            TpaBKa251/src/main/resources/logs/some-logs/2024/05.txt`, \
             `/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3-java-\
             TpaBKa251/src/main/resources/logs/some-logs/2024_08/logs`, \
             `/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3-java-\
             TpaBKa251/src/main/resources/logs/some-logs/logs-from-url.txt`, \
             `/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3-java-\
-            TpaBKa251/src/main/resources/logs/some-logs/logs_2024.log`
+            TpaBKa251/src/main/resources/logs/some-logs/logs_2024.txt`
             | Начальная дата | 01.01.2015
             | Конечная дата | 01.01.2016 20:12:34
             | Поле для фильтрации | method
@@ -97,7 +97,7 @@ class ReportMapperToAsciiDocTest {
             "/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3"
                 + "-java-TpaBKa251/src/main/resources/logs/some-logs/05-2023.txt",
             "/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3"
-                + "-java-TpaBKa251/src/main/resources/logs/some-logs/2024/05.log",
+                + "-java-TpaBKa251/src/main/resources/logs/some-logs/2024/05.txt",
             "/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3"
                 + "-java-TpaBKa251/src/main/resources/logs/some-logs/logs-from-url.txt",
             "/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3"
@@ -105,7 +105,7 @@ class ReportMapperToAsciiDocTest {
             "/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3"
                 + "-java-TpaBKa251/src/main/resources/logs/some-logs/2024_08/logs",
             "/C:/Users/ilial/IdeaProjects/backend_academy_2024_project_3"
-                + "-java-TpaBKa251/src/main/resources/logs/some-logs/logs_2024.log"
+                + "-java-TpaBKa251/src/main/resources/logs/some-logs/logs_2024.txt"
         ));
         when(logReport.getTotalCountRequests()).thenReturn(205729L);
         when(logReport.getAverageBytesSize()).thenReturn(659891L);
