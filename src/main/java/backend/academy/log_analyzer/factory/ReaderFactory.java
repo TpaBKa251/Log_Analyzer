@@ -3,7 +3,6 @@ package backend.academy.log_analyzer.factory;
 import com.beust.jcommander.ParameterException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -42,7 +41,7 @@ public class ReaderFactory {
 
         if (path.size() == 1) {
             addReaderFromSinglePath(path.getFirst(), readers);
-        } else if (path.size() > 1){
+        } else if (path.size() > 1) {
             addPatternReaders(path, readers);
         }
 
