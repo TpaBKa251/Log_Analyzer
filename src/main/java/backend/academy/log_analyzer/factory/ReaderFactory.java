@@ -42,7 +42,7 @@ public class ReaderFactory {
 
         if (path.size() == 1) {
             addReaderFromSinglePath(path.getFirst(), readers);
-        } else {
+        } else if (path.size() > 1){
             addPatternReaders(path, readers);
         }
 
@@ -58,26 +58,11 @@ public class ReaderFactory {
      *
      * @param pathToResource путь до ресурса
      * @param readers маппа ридеров для заполнения
-     *
-     * @throws IOException если произошла ошибка создания ридера для одного файла или URL
      */
-    private static void addReaderFromSinglePath(URI pathToResource, Map<BufferedReader, URI> readers)
-            throws IOException {
+    private static void addReaderFromSinglePath(URI pathToResource, Map<BufferedReader, URI> readers) {
         switch (pathToResource.getScheme()) {
-            case "file" -> {
-                try {
-                    addSingleFileReader(pathToResource, readers);
-                } catch (FileNotFoundException e) {
-                    throw new IOException("Файл не доступен", e);
-                }
-            }
-            case "http", "https" -> {
-                try {
-                    addUrlReader(pathToResource, readers);
-                } catch (IOException e) {
-                    throw new IOException("URL не доступна", e);
-                }
-            }
+            case "file" -> addSingleFileReader(pathToResource, readers);
+            case "http", "https" -> addUrlReader(pathToResource, readers);
             default -> throw new ParameterException("Неизвестный вид ресурса");
         }
     }
@@ -88,15 +73,15 @@ public class ReaderFactory {
      *
      * @param input URI до URL
      * @param readers маппа ридеров для заполнения
-     *
-     * @throws IOException если произошла ошибка создания ридера
      */
-    private static void addUrlReader(URI input, Map<BufferedReader, URI> readers) throws IOException {
-        URL url = input.toURL();
-        readers.put(new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)), input);
+    private static void addUrlReader(URI input, Map<BufferedReader, URI> readers) {
+        try {
+            URL url = input.toURL();
+            readers.put(new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)), input);
+        } catch (IOException ignored) {
+        }
     }
 
-    //
     /**
      * Метод добавления ридеров для файлов по шаблону
      *
@@ -107,7 +92,6 @@ public class ReaderFactory {
         for (URI pathToResource : path) {
             Path resourcePath = Paths.get(pathToResource);
 
-            // Если ридер не создался - игнорируем, у нас еще есть много файлов
             try {
                 readers.put(new BufferedReader(new FileReader(resourcePath.toFile(),
                         StandardCharsets.UTF_8)), pathToResource);
@@ -122,11 +106,13 @@ public class ReaderFactory {
      *
      * @param input URI до файла
      * @param readers список ридеров для заполнения
-     *
-     * @throws IOException если произошла ошибка создания ридера
      */
-    private static void addSingleFileReader(URI input, Map<BufferedReader, URI> readers) throws IOException {
+    private static void addSingleFileReader(URI input, Map<BufferedReader, URI> readers) {
         Path path = Paths.get(input);
-        readers.put(new BufferedReader(new FileReader(path.toFile(), StandardCharsets.UTF_8)), input);
+
+        try {
+            readers.put(new BufferedReader(new FileReader(path.toFile(), StandardCharsets.UTF_8)), input);
+        } catch (IOException ignored) {
+        }
     }
 }
