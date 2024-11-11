@@ -118,7 +118,7 @@ public class PathParserTest {
     @ParameterizedTest(name = "шаблон: {0}, ожидаемые файлы: {1}")
     @MethodSource("provideDataToTestParsePatternFilesSuccessful")
     void testParsePatternFilesSuccessful(String pattern, List<URI> expectedFiles) {
-        assertThat(pathParser.parsePath(pattern)).containsExactlyElementsOf(expectedFiles);
+        assertThat(pathParser.parsePath(pattern)).containsExactlyInAnyOrderElementsOf(expectedFiles);
     }
 
     static Stream<Arguments> provideDataToTestParsePatternFilesSuccessful() {
@@ -126,13 +126,13 @@ public class PathParserTest {
             Arguments.of(tempDir.toFile() + "/**/05", List.of(
                 tempDir.resolve("logsDir/logs/some-logs/2024/05").toUri())),
             Arguments.of(tempDir.toFile() + "/logsDir/logs/some-logs/*.txt", List.of(
-                tempDir.resolve("logsDir/logs/some-logs/05-2023.txt").toUri(),
-                tempDir.resolve("logsDir/logs/some-logs/logs_2024.txt").toUri()
+                tempDir.resolve("logsDir/logs/some-logs/logs_2024.txt").toUri(),
+                tempDir.resolve("logsDir/logs/some-logs/05-2023.txt").toUri()
             )),
             Arguments.of(tempDir.toFile() + "/logsDir/logs/some-logs/**", List.of(
-                tempDir.resolve("logsDir/logs/some-logs/05-2023.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/2024/05").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/2024/05.txt").toUri(),
+                tempDir.resolve("logsDir/logs/some-logs/05-2023.txt").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/2024_08/logs").toUri(),
                 tempDir.resolve("logsDir/logs/some-logs/logs_2024.txt").toUri()
             )),

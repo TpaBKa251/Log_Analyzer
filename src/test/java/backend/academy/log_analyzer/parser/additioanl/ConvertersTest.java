@@ -119,9 +119,9 @@ public class ConvertersTest {
     @Test
     void testCreateDirectoryIfItInvalid() {
 
-        assertThatThrownBy(() -> converters.convertOutputFile("ZHSUBCJ:/invalid/directory", ".txt"))
+        assertThatThrownBy(() -> converters.convertOutputFile("ZHSUBCJ:/invalid.txt/directory", ".txt"))
             .isInstanceOf(ParameterException.class)
-            .hasMessage("Не удалось создать директорию для файла: ZHSUBCJ:\\invalid");
+            .hasMessage("Не удалось создать директорию для файла: ZHSUBCJ:\\invalid.txt");
     }
 
     @DisplayName("Тесты конвертации даты фильтра")
