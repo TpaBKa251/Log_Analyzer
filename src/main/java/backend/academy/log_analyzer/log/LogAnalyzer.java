@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -62,24 +64,32 @@ public class LogAnalyzer {
                     return reader.lines().onClose(() -> closeQuietly(reader));
                 })
                 .map(Log::parse)
-                .filter(log -> log != null
-                    && logMatcherDate.isLogMatch(log.time(), params)
-                    && logMatcherFilter.isLogMatchByFilter(log, params))
+                .filter(log -> isLogMatch(log, params))
                 .forEach(filteredLog -> report.addAllStats(filteredLog, uris[0]));
 
             if (report.getTotalCountRequests() == 0) {
                 throw new ParameterException("Во входных файлах/URL не найдено ни одного лога."
                     + "\nПросмотренные ресурсы: "
-                    + readers.values().stream().map(u -> "\n\t" + u.toString()).toList() + "\nФильтры: "
-                        + "\n\tначальная дата: " + params.from() + "\n\tконечная дата: " + params.to()
-                        + "\n\tполе для фильтрации: " + params.filterField()
-                        + "\n\tзначение: " + params.filterValue());
+                    + readers.values().stream()
+                    .map(u -> "\t" + u.toString())
+                    .collect(Collectors.joining("\n"))
+                    + "\nФильтры: "
+                    + "\n\tначальная дата: " + params.from()
+                    + "\n\tконечная дата: " + params.to()
+                    + "\n\tполе для фильтрации: " + params.filterField()
+                    + "\n\tзначение: " + params.filterValue());
             }
 
             return reportMapper.mapLogToOutputFormat(report, params);
         } finally {
             readers.keySet().forEach(this::closeQuietly);
         }
+    }
+
+    private boolean isLogMatch(Log log, ArgsParameters params) {
+        return log != null
+            && logMatcherDate.isLogMatch(log.time(), params)
+            && logMatcherFilter.isLogMatchByFilter(log, params);
     }
 
     /**
